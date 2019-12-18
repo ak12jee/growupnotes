@@ -1,0 +1,24 @@
+# Compiled Object files, Static and Dynamic libs (Shared Objects)
+*.o
+*.a
+*.so
+
+# Folders
+
+pkg
+bin
+log
+pid
+assets
+
+
+*.exe
+
+*.psd
+
+*.sublime-project
+*.sublime-workspace
+*.idea
+*.code-workspace
+*.sh
+# *.bat
