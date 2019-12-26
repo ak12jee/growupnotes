@@ -1,0 +1,36 @@
+
+1.CMake在Visual Studio下保持目录结构
+原理
+主要通过CMAKE自带函数source_group来设定。
+需要把add_executable()函数进行封装，包裹一层source_group()的处理
+
+cmake_minimum_required(VERSION 3.1)
+
+project(hello)
+
+function(assign_source_group)
+    foreach(_source IN ITEMS ${ARGN})
+        if (IS_ABSOLUTE "${_source}")
+            file(RELATIVE_PATH _source_rel "${CMAKE_CURRENT_SOURCE_DIR}" "${_source}")
+        else()
+            set(_source_rel "${_source}")
+        endif()
+        get_filename_component(_source_path "${_source_rel}" PATH)
+        string(REPLACE "/" "\\" _source_path_msvc "${_source_path}")
+        source_group("${_source_path_msvc}" FILES "${_source}")
+    endforeach()
+endfunction(assign_source_group)
+
+function(my_add_executable)
+    foreach(_source IN ITEMS ${ARGN})
+        assign_source_group(${_source})
+    endforeach()
+    add_executable(${ARGV})
+endfunction(my_add_executable)
+
+my_add_executable(hello include/hello.hpp src/hello.cpp)
+
+
+2.vs工程设置文件夹
+# group them together in a single folder inside IDEs
+set_target_properties(implementation PROPERTIES FOLDER example/executable_dll_and_plugin)
