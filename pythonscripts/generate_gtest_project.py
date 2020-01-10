@@ -123,7 +123,8 @@ if __name__ == "__main__":
     this script generate c++ testing project by cmake tools
     do some unit testing
     generate CMakeLists.txt file in PATH where is . or setting form args.path
-    CMake tools find c++ testing files in PATH''')
+    CMake tools find c++ testing files in PATH
+    please GTEST_INCLUDE_DIR GTEST_LIB_DIR for environment variable''')
 
     parser.add_argument("-g", action="store_true", help="generate project configuration")
     parser.add_argument("-r", action="store_true", help="run testing")
