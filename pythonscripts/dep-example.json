@@ -1,0 +1,23 @@
+{
+    "project_name":"googletest01",
+    "gtest_include_dir":"D:/workspace/googletest/install/include",
+    "gtest_lib_dir":"D:/workspace/googletest/install/lib",
+    "include_directories":[
+        "/usr/local/include2",
+        "/usr/local/include2"
+    ],
+    "link_directories":[
+        "/usr/local/lib",
+        "/usr/local/lib64"
+    ],
+    "target_link_libraries":[
+        "gtestd",
+        "gtest_maind",
+        "Threads::Threads"
+    ],
+    "source":[
+        "sample4.cc",
+        "sample4.h",
+        "sample4_unittest.cc"
+    ]
+}
