@@ -14,7 +14,7 @@ import json
 cfg_url = "http://120.78.21.70:9100/record/v1/getsharereplay"
 cfg_appid = 18001
 cfg_shareId = 862800
-cfg_userId = [2778969, 2949900, 0, 0]
+cfg_userId = [2778969, 2949900]
 cfg_speed = 1
 cfg_ip = '127.0.0.1'
 cfg_port = 6001
@@ -117,8 +117,6 @@ class Worker(object):
                 msg = {'m_msgId': 55, 'm_type': operType % 100, 'm_think': operCard}
                 self.msgList.append([pos, msg])
             elif operType == 107 or operType == 7 or operType == 106 or operType == 6 or operType == 109 or operType == 9 or operType == 108 or operType == 8 or operType == 3:
-                if operType == 109 or operType == 9:
-                    self.sendTuoguan(0)
                 msg = {'m_msgId': 52, 'm_type': operType % 100, 'm_handCardCount': 0, 'm_think': operCard}
                 self.msgList.append([pos, msg])
 
@@ -127,6 +125,21 @@ class Worker(object):
         msgBody = msgpack.packb(msg)
         msgData = struct.pack('HHII', len(msgBody), 100, self.tm, msg['m_msgId'] * (self.tm % 10000 + 1)) + msgBody
         self.tcpClient.send(msgData)
+
+    def sendCreateDesk(self):
+        specialCard = []
+        for i in self.handCard:
+            for j in range(0,len(i),2):
+                specialCard.append(i[j]*10+i[j+1])
+        for i in self.deskCard:
+            specialCard.append(i[0]*10+i[1])
+        extra_data = {"m_zhuangPos":self.zhuangPos+1}
+        msgUser = {'m_msgId': 186002, 'userId': cfg_userId[0], "specialCard":specialCard, 'gameType': 65, 'deskId': self.videoData['m_deskId'], 'gate_id_':1, 'playType':self.playType, 'extra_data_':(json.dumps((extra_data)))}        
+        self.sendMsg(msgUser)
+
+    def sendJoinDesk(self):
+        msgUser = {'m_msgId': 186003, 'userId': cfg_userId[1:], 'deskid': self.videoData['m_deskId'], 'gate_id_':1}        
+        self.sendMsg(msgUser)
 
     def sendCfgDesk(self):
         specialCard = []
@@ -200,6 +213,10 @@ def cmd(w):
             w.sendOper()
         elif ret[0] == 'resetMsgPos':
             w.resetCurSendMsgPos()
+        elif ret[0] == 'create':
+            w.sendCreateDesk()
+        elif ret[0] == 'join':
+            w.sendJoinDesk()
         elif ret[0] == 'h':
             print('''
 Usage :
@@ -210,6 +227,8 @@ Usage :
     reset
     n or sedoper
     resetMsgPos
+    create
+    join
     h --help
             ''')
 

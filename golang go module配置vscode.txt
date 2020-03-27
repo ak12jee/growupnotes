@@ -1,0 +1,43 @@
+1.vscode的settings.json配置文件如下：
+{
+    "go.toolsGopath": "/d/workspace/sdk/go_sys_path",
+    "go.useLanguageServer": true,
+    "[go]": {
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true,
+        },
+        "editor.snippetSuggestions": "none",
+    },
+    "[go.mod]": {
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true,
+        },
+    },
+    "gopls": {
+        "usePlaceholders": true,
+        "staticcheck": false,
+    }
+}
+
+2.设置golang的代理
+# 开启 go modules 特征
+export GO111MODULE=on
+# 设置GOPROXY环境变量
+export GOPROXY=https://goproxy.io
+
+3.安装 gopls
+go get -v golang.org/x/tools/gopls@latest
+
+
+**************************坑记**************************
+1、当前项目目录下，自定义的一些包，无法导入，也不能编译
+go mod init xxx.com/projectrootname             ???
+go mod init projectrootname                     ???
+最后莫名其妙地又好了。。。。。怀疑和这个init有关
+其实可以这些写，就可以了。
+import (
+	"xxxx1/src/logg"
+	"xxxx1/src/protobuf/test"
+)
